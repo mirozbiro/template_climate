@@ -186,9 +186,17 @@ CONFIG_FLOW = {
 
 OPTIONS_FLOW = {
     "init": SchemaFlowFormStep(
-        OPTIONS_SCHEMA, validate_user_input=_validate_user_input
+        OPTIONS_SCHEMA, validate_user_input=_validate_user_input, prepare_form=_options_flow_prepare
     ),
 }
+
+
+async def _options_flow_prepare(handler: SchemaCommonFlowHandler) -> dict[str, Any]:
+    """Prepare options for the form, converting precision to string for SelectSelector."""
+    options = dict(handler.options)
+    if CONF_PRECISION in options and options[CONF_PRECISION] is not None:
+        options[CONF_PRECISION] = str(options[CONF_PRECISION])
+    return options
 
 
 class ClimateTemplateConfigFlowHandler(SchemaConfigFlowHandler, domain=DOMAIN):
