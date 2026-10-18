@@ -124,7 +124,7 @@ OPTIONS_SCHEMA_DICT: dict[Any, Any] = {
     vol.Optional(CONF_TEMP_STEP, default=DEFAULT_PRECISION): _number_box(0.1),
     vol.Optional(CONF_PRECISION): selector.SelectSelector(
         selector.SelectSelectorConfig(
-            options=[0.1, 0.5, 1.0],
+            options=["0.1", "0.5", "1.0"],
             mode=selector.SelectSelectorMode.DROPDOWN,
         )
     ),
@@ -171,7 +171,7 @@ async def _validate_user_input(
             except vol.Invalid as err:
                 raise SchemaFlowError("invalid_action") from err
 
-    # precision arrives as a float from the select dropdown
+    # precision arrives as a string from the select dropdown, but could be float from existing config
     if user_input.get(CONF_PRECISION) not in (None, ""):
         user_input[CONF_PRECISION] = float(user_input[CONF_PRECISION])
 
